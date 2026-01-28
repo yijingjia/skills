@@ -1,0 +1,14 @@
+{
+  "name": "markdown-to-image-skill",
+  "version": "2.0.0",
+  "description": "Convert Markdown to themed images using HTML and Playwright",
+  "type": "module",
+  "dependencies": {
+    "marked": "^11.0.0",
+    "playwright": "^1.40.0",
+    "sharp": "^0.34.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

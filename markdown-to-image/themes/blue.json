@@ -1,0 +1,44 @@
+{
+  "name": "blue",
+  "description": "A clean and elegant theme inspired by Typora's Lapis theme, featuring blue tones and excellent readability.",
+  "colors": {
+    "background": "#ffffff",
+    "textcolor": "#40464f",
+    "primarycolor": "#4870ac",
+    "markercolor": "#a2b6d4",
+    "sourcecolor": "#a8a8a9",
+    "highlightcolor": "#ffffb5",
+    "blockbackground": "#f6f8fa",
+    "imageshadow": "#e3e8f0"
+  },
+  "fonts": {
+    "header": "Source Han Serif CN Bold",
+    "body": "Cantarell, Source Han Serif CN Medium",
+    "code": "JetBrains Mono, Courier New, Monaco, Menlo"
+  },
+  "layout": {
+    "baseFontSize": 56,
+    "lineHeight": 1.6,
+    "scaleFactor": 2.16,
+    "paddingTop": 120,
+    "paddingRight": 100,
+    "paddingBottom": 120,
+    "paddingLeft": 100,
+    "h1Scale": 2.6,
+    "headingAlign": "left",
+    "h2Style": "border-left"
+  },
+  "callouts": {
+    "note": "#4870ac",
+    "info": "#527da8",
+    "tip": "#428485",
+    "success": "#428485",
+    "question": "#a88652",
+    "warning": "#a88652",
+    "failure": "#a34f55",
+    "danger": "#a34f55",
+    "bug": "#a34f55",
+    "example": "#614f9c",
+    "quote": "#a8a8a9"
+  }
+}

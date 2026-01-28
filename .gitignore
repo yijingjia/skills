@@ -1,0 +1,9 @@
+**/node_modules/
+output/
+*.png
+*.jpg
+*.jpeg
+.DS_Store
+npm-debug.log*
+
+test/
