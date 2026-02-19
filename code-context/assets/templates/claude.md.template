@@ -1,0 +1,80 @@
+# {MODULE_NAME} Module
+
+## Position
+
+This module is responsible for: {MODULE_POSITION}
+
+Examples:
+- API layer - handles HTTP requests and responses
+- Business logic layer - implements core business functionality
+- Data access layer - manages database operations
+- Utility layer - provides common utility functions
+
+## Logic
+
+This module executes: {MODULE_LOGIC}
+
+Examples:
+- Defines RESTful API endpoints, routes requests to appropriate service layer
+- Implements user authentication and authorization logic
+- Provides data validation and transformation functionality
+- Manages integration with external services
+
+## Constraints
+
+When using this module, follow these constraints:
+
+{MODULE_CONSTRAINTS}
+
+Examples:
+- All endpoints need proper authentication and authorization
+- Request parameters must be validated through Pydantic models
+- Services should be stateless
+- Exceptions and errors must be handled properly
+
+## Domain List
+
+This module contains the following submodules and features:
+
+| Name | Type | Description |
+|------|------|-------------|
+| {FILE_OR_DIR_NAME} | {module/directory} | {FUNCTIONALITY} |
+| ... | ... | ... |
+
+Example:
+| Name | Type | Description |
+|------|------|-------------|
+| user.py | module | User management functionality |
+| auth.py | module | Authentication related functionality |
+| services | directory | Business service submodule |
+| schemas | directory | Data model definitions |
+
+## Dependencies
+
+This module depends on:
+{DEPENDENCIES}
+
+Examples:
+- app.models.user
+- app.services.auth
+- pydantic
+- sqlalchemy
+
+This module exports:
+{EXPORTS}
+
+Examples:
+- User class
+- UserService class
+- create_user() function
+- /api/users endpoint
+
+## Additional Notes
+
+{ADDITIONAL_NOTES}
+
+You can add here:
+- Module design decisions
+- Important business rules
+- Interaction patterns with other modules
+- Future improvement plans

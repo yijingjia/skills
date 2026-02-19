@@ -1,0 +1,19 @@
+#!/bin/bash
+# Git pre-commit hook for codebase-context-manager
+# This file is a template, will be processed during installation
+
+echo "🔄 Updating codebase context..."
+
+# Get staged source files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py|js|ts|jsx|tsx|go|java|rs|rb|php|swift|kt|scala)$' || true)
+
+if [ -n "$STAGED_FILES" ]; then
+    echo "📝 Detected staged source files, updating context..."
+
+    cd "$(git rev-parse --show-toplevel)"
+    python3 scripts/update_context.py --headers-only --no-parent
+
+    git add $(echo "$STAGED_FILES" | tr '\n' ' ')
+fi
+
+echo "✅ Codebase context updated"
