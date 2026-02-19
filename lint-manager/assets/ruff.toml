@@ -1,0 +1,41 @@
+target-version = "py311"
+
+[lint]
+# Enable pycodestyle (E, W), Pyflakes (F), and isort (I)
+# See https://docs.astral.sh/ruff/rules/
+select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "ARG", "SIM"]
+ignore = ["E501"]  # Line too long (handled by formatter)
+
+# Allow autofix for all enabled rules
+fixable = ["ALL"]
+unfixable = []
+
+# Exclude directories
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+[format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "double"
+skip-magic-trailing-comma = false
