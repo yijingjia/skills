@@ -4,9 +4,10 @@ Automatically maintain codebase context documentation and comments, supporting a
 
 ## Features
 
-- **Multi-language Support**: Python, JavaScript/TypeScript, Java, Go, Rust, C/C++, Ruby, PHP, Swift, Kotlin, etc.
+- **Multi-language Support**: Python, JavaScript/TypeScript, Java, Go, Rust, C/C++, Ruby, PHP, Swift/Xcode, Kotlin, etc.
 - **Auto Comments**: Add INPUT/OUTPUT/POS header comments to source files
-- **Module Documentation**: Generate Claude.md files for each business module
+- **Module Documentation**: Generate CLAUDE.md files for each business module
+  - Xcode/iOS projects use path-based naming: `CLAUDE_folder1_folder2.md`
 - **Git Hook**: Support automatic updates to keep documentation in sync with code
 
 ## Quick Start
@@ -58,7 +59,7 @@ python3 scripts/install_git_hook.py
 # POS: Business logic layer - implements core functionality
 ```
 
-### Claude.md
+### CLAUDE.md
 
 ```markdown
 # Module Name
@@ -81,14 +82,14 @@ This module executes: ...
 ## Scripts
 
 - `add_file_headers.py` - Add/update file header comments
-- `analyze_module.py` - Analyze module and generate Claude.md
+- `analyze_module.py` - Analyze module and generate CLAUDE.md
 - `update_context.py` - Main update script
 - `install_git_hook.py` - Install Git hook
 
 ## References
 
 - [Header Comment Format](references/header_format.md)
-- [Claude.md Format](references/claude_md_format.md)
+- [CLAUDE.md Format](references/claude_md_format.md)
 - [Template File](assets/templates/claude.md.template)
 
 ## License

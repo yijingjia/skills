@@ -4,8 +4,8 @@ Main update script: coordinates all context update operations.
 
 This script will:
 1. Add/update INPUT/OUTPUT/POS header comments for all source files
-2. Generate/update Claude.md files for all module directories
-3. Update parent directory Claude.md files progressively
+2. Generate/update CLAUDE.md files for all module directories
+3. Update parent directory CLAUDE.md files progressively
 """
 
 import sys
@@ -23,7 +23,7 @@ def add_file_headers(directory: Path):
 
 
 def generate_module_docs(directory: Path, processed: set[Path] = None):
-    """Generate Claude.md for all module directories."""
+    """Generate CLAUDE.md for all module directories."""
     if processed is None:
         processed = set()
 
@@ -48,7 +48,7 @@ def generate_module_docs(directory: Path, processed: set[Path] = None):
 
 
 def should_have_claude_md(directory: Path) -> bool:
-    """Check if directory should have Claude.md."""
+    """Check if directory should have CLAUDE.md."""
     excluded = {'.git', '.venv', 'venv', '__pycache__', 'node_modules', '.pytest_cache', '.ruff_cache', 'dist', 'build'}
 
     if directory.name in excluded:
@@ -62,7 +62,7 @@ def should_have_claude_md(directory: Path) -> bool:
 
 
 def update_parent_context(directory: Path):
-    """Update parent directory Claude.md files."""
+    """Update parent directory CLAUDE.md files."""
     parent = directory.parent
 
     while parent != directory.root:

@@ -44,12 +44,70 @@ def should_process_file(file_path: Path) -> bool:
     return False
 
 
+def is_xcode_project(directory: Path) -> bool:
+    """Detect if this is an Xcode/iOS project."""
+    # Check for Xcode project indicators
+    xcode_indicators = [
+        '*.xcodeproj',
+        'Package.swift',
+        'Podfile',
+    ]
+
+    # Search in current directory and parent directories
+    current = directory
+    while current != current.root:
+        for indicator in xcode_indicators:
+            if list(current.glob(indicator)):
+                return True
+        current = current.parent
+
+    return False
+
+
+def get_claude_md_filename(directory: Path) -> str:
+    """Generate CLAUDE.md filename, with special handling for Xcode projects."""
+    # Default filename
+    if not is_xcode_project(directory):
+        return 'CLAUDE.md'
+
+    # For Xcode projects, use path-based naming
+    # Get relative path from project root
+    project_root = find_xcode_project_root(directory)
+    if project_root and directory != project_root:
+        relative_path = directory.relative_to(project_root)
+        # Convert path segments to filename: CLAUDE_folder1_folder2.md
+        path_parts = '_'.join(relative_path.parts)
+        return f'CLAUDE_{path_parts}.md'
+
+    return 'CLAUDE.md'
+
+
+def find_xcode_project_root(directory: Path) -> Path | None:
+    """Find the Xcode project root directory."""
+    current = directory
+
+    while current != current.root:
+        # Check for Xcode project indicators
+        if list(current.glob('*.xcodeproj')):
+            return current
+        if (current / 'Package.swift').exists():
+            return current
+        if (current / 'Podfile').exists():
+            return current
+
+        current = current.parent
+
+    return None
+
+
 def detect_project_type(directory: Path) -> str:
     """Detect project type."""
     files = list(directory.iterdir())
     file_names = {f.name for f in files}
 
-    if 'package.json' in file_names or 'tsconfig.json' in file_names:
+    if is_xcode_project(directory):
+        return 'Swift/Xcode'
+    elif 'package.json' in file_names or 'tsconfig.json' in file_names:
         return 'JavaScript/TypeScript'
     elif 'requirements.txt' in file_names or 'setup.py' in file_names or 'pyproject.toml' in file_names:
         return 'Python'
@@ -129,6 +187,8 @@ def analyze_file(file_path: Path) -> dict[str, any]:
         return analyze_cpp_file(file_path, content)
     elif language == 'Go':
         return analyze_go_file(file_path, content)
+    elif language == 'Swift':
+        return analyze_swift_file(file_path, content)
     else:
         return analyze_generic_file(file_path, content, language)
 
@@ -380,6 +440,87 @@ def analyze_go_file(file_path: Path, content: str) -> dict:
     }
 
 
+def analyze_swift_file(file_path: Path, content: str) -> dict:
+    """Analyze Swift file."""
+    import re
+
+    imports = []
+    classes = []
+    structs = []
+    enums = []
+    functions = []
+    protocols = []
+
+    # Extract imports
+    for line in content.split('\n'):
+        match = re.match(r'^import\s+([A-Za-z][A-Za-z0-9_]*)', line.strip())
+        if match:
+            imports.append(match.group(1))
+
+    # Extract classes
+    for line in content.split('\n'):
+        class_match = re.match(r'^class\s+([A-Z][a-zA-Z0-9_]*)', line.strip())
+        if class_match:
+            classes.append(class_match.group(1))
+
+    # Extract structs
+    for line in content.split('\n'):
+        struct_match = re.match(r'^struct\s+([A-Z][a-zA-Z0-9_]*)', line.strip())
+        if struct_match:
+            structs.append(struct_match.group(1))
+
+    # Extract enums
+    for line in content.split('\n'):
+        enum_match = re.match(r'^enum\s+([A-Z][a-zA-Z0-9_]*)', line.strip())
+        if enum_match:
+            enums.append(enum_match.group(1))
+
+    # Extract protocols
+    for line in content.split('\n'):
+        protocol_match = re.match(r'^protocol\s+([A-Z][a-zA-Z0-9_]*)', line.strip())
+        if protocol_match:
+            protocols.append(protocol_match.group(1))
+
+    # Extract functions
+    for line in content.split('\n'):
+        func_match = re.match(r'^func\s+([a-z_][a-zA-Z0-9_]*)\s*\(', line.strip())
+        if func_match:
+            functions.append(func_match.group(1))
+
+    # Combine types for exports
+    all_types = classes + structs + enums + protocols
+
+    return {
+        'name': file_path.name,
+        'type': file_path.suffix,
+        'language': 'Swift',
+        'imports': imports[:10],
+        'exports': all_types,
+        'functions': functions,
+        'classes': all_types,  # Includes classes, structs, enums, protocols
+        'description': infer_swift_file_description(file_path, classes, structs, enums, functions)
+    }
+
+
+def infer_swift_file_description(file_path: Path, classes: list, structs: list, enums: list, functions: list) -> str:
+    """Infer Swift file description."""
+    name = file_path.name.lower()
+
+    if 'view' in name:
+        return 'SwiftUI or UIKit view component'
+    elif 'viewmodel' in name or 'store' in name:
+        return 'View model or state management'
+    elif 'model' in name:
+        return 'Data model definition'
+    elif classes or structs or enums:
+        type_count = len(classes) + len(structs) + len(enums)
+        return f"Defines {type_count} types"
+    elif functions:
+        return f"Defines {len(functions)} functions"
+    else:
+        return 'Swift implementation'
+
+
 def analyze_generic_file(file_path: Path, content: str, language: str) -> dict:
     """Analyze generic file."""
     file_type = infer_file_type(file_path)
@@ -458,9 +599,9 @@ def read_file_safe(file_path: Path) -> str:
 
 
 def generate_claude_md(directory: Path, module_info: dict, output_path: Path = None):
-    """Generate Claude.md file."""
+    """Generate CLAUDE.md file."""
     if output_path is None:
-        output_path = directory / 'Claude.md'
+        output_path = directory / get_claude_md_filename(directory)
 
     position = infer_module_position(directory, module_info)
     logic = infer_module_logic(directory, module_info)

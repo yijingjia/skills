@@ -1,6 +1,8 @@
-# Claude.md 格式说明
+# CLAUDE.md 格式说明
 
-每个业务模块目录下都应该有一个 `Claude.md` 文件，用于描述该模块在系统中的角色和功能。
+每个业务模块目录下都应该有一个 `CLAUDE.md` 文件，用于描述该模块在系统中的角色和功能。
+
+**注意**：对于 Xcode/iOS 项目（包括 SwiftUI、UIKit 等），文件名会使用路径格式：`CLAUDE_<folder1>_<folder2>.md`，以避免在同一目录下有多个 CLAUDE.md 文件。
 
 ## 文件结构
 
@@ -83,12 +85,18 @@
 
 ## 自动生成
 
-`Claude.md` 文件可以由 `analyze_module.py` 脚本自动生成或更新。脚本会：
+`CLAUDE.md` 文件可以由 `analyze_module.py` 脚本自动生成或更新。脚本会：
 
-1. 扫描目录下的所有 Python 文件
+1. 扫描目录下的所有代码文件（支持多种编程语言）
 2. 分析每个文件的导入、类、函数
 3. 推断模块的功能和依赖关系
-4. 生成或更新 `Claude.md` 文件
+4. 生成或更新 `CLAUDE.md` 文件
+
+**Xcode/iOS 项目特殊处理**：
+- 自动检测 Xcode 项目（查找 `.xcodeproj`、`Package.swift` 或 `Podfile`）
+- 使用路径命名：例如 `Features/Auth/` 目录会生成 `CLAUDE_Features_Auth.md`
+- 避免多个模块在同一目录产生文件名冲突
+- 适用于所有 iOS/macOS 项目（SwiftUI、UIKit、Swift 等）
 
 ## 手动维护
 
