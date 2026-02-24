@@ -10,7 +10,6 @@ This script will:
 
 import sys
 from pathlib import Path
-from typing import Set
 
 
 def add_file_headers(directory: Path):
@@ -23,7 +22,7 @@ def add_file_headers(directory: Path):
     process_directory(directory, dry_run=False)
 
 
-def generate_module_docs(directory: Path, processed: Set[Path] = None):
+def generate_module_docs(directory: Path, processed: set[Path] = None):
     """Generate Claude.md for all module directories."""
     if processed is None:
         processed = set()

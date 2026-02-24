@@ -4,12 +4,11 @@ Installs lint tools for the detected project languages.
 Supports: ESLint, Ruff, SwiftLint, golangci-lint
 """
 
-import os
-import sys
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
-
 
 LINTERS = {
     "javascript": {

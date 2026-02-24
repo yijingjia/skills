@@ -6,6 +6,9 @@ target-version = "py313"
 select = ["E", "F", "I", "N", "W", "B", "C4", "UP", "ARG", "SIM"]
 ignore = ["E501"]  # Line too long (handled by formatter)
 
+# NOTE: Ruff does not flag TODO/FIXME comments by default.
+# These markers are allowed without generating lint errors.
+
 # Allow autofix for all enabled rules
 fixable = ["ALL"]
 unfixable = []

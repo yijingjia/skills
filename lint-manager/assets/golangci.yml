@@ -128,6 +128,16 @@ issues:
         - lll
       source: "^//go:generate "
 
+    # Exclude TODO/FIXME/HACK/XXX/NOTE comments from godot
+    - linters:
+        - godot
+      source: "//.*(TODO|FIXME|HACK|XXX|NOTE|BUG)"
+
+    # Exclude TODO/FIXME/HACK/XXX/NOTE from tllwen
+    - linters:
+        - tllwen
+      source: "//.*(TODO|FIXME|HACK|XXX|NOTE|BUG)"
+
 severity:
   default-severity: error
   case-sensitive: false

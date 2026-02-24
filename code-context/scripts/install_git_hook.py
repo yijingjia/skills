@@ -6,8 +6,8 @@ This script installs a Git pre-commit hook that automatically updates context be
 """
 
 import os
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 
@@ -89,11 +89,11 @@ def main():
             print("⚠️  No pre-commit hook found")
             sys.exit(0)
 
-        with open(hook_path, 'r') as f:
+        with open(hook_path) as f:
             content = f.read()
             if 'codebase-context-manager' not in content:
                 print("⚠️  Existing pre-commit hook was not installed by codebase-context-manager")
-                print("   To remove it anyway, manually delete: {}".format(hook_path))
+                print(f"   To remove it anyway, manually delete: {hook_path}")
                 sys.exit(1)
 
         os.remove(hook_path)

@@ -8,8 +8,6 @@ Supports multiple programming languages and comment formats.
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
-
 
 # Language configuration: comment formats and file extensions
 LANGUAGE_CONFIG = {
@@ -138,7 +136,7 @@ LANGUAGE_CONFIG = {
 }
 
 
-def detect_language(file_path: Path) -> Optional[Dict]:
+def detect_language(file_path: Path) -> dict | None:
     """Detect the language type of a file."""
     ext = file_path.suffix.lower()
 
@@ -156,7 +154,7 @@ def detect_language(file_path: Path) -> Optional[Dict]:
     }
 
 
-def analyze_file_header(file_path: Path) -> Dict[str, any]:
+def analyze_file_header(file_path: Path) -> dict[str, any]:
     """Analyze file and extract INPUT/OUTPUT/POS information."""
     lang_config = detect_language(file_path)
     file_name = file_path.name.lower()
@@ -174,7 +172,7 @@ def analyze_file_header(file_path: Path) -> Dict[str, any]:
     }
 
 
-def infer_input(file_path: Path, lang_config: Dict) -> Dict[str, List[str]]:
+def infer_input(file_path: Path, lang_config: dict) -> dict[str, list[str]]:
     """Infer INPUT description, returns dict with internal and external lists."""
     content = read_file_safe(file_path)
     if not content:
@@ -201,7 +199,7 @@ def infer_input(file_path: Path, lang_config: Dict) -> Dict[str, List[str]]:
     return {'internal': [], 'external': []}
 
 
-def extract_python_imports(content: str) -> List[str]:
+def extract_python_imports(content: str) -> list[str]:
     """Extract Python imports."""
     imports = []
     patterns = [
@@ -218,7 +216,7 @@ def extract_python_imports(content: str) -> List[str]:
     return imports[:10]
 
 
-def extract_js_imports(content: str) -> List[str]:
+def extract_js_imports(content: str) -> list[str]:
     """Extract JavaScript/TypeScript imports."""
     imports = []
     patterns = [
@@ -236,7 +234,7 @@ def extract_js_imports(content: str) -> List[str]:
     return imports[:10]
 
 
-def extract_java_imports(content: str) -> List[str]:
+def extract_java_imports(content: str) -> list[str]:
     """Extract Java imports."""
     imports = []
     pattern = r'^import\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s*;'
@@ -249,7 +247,7 @@ def extract_java_imports(content: str) -> List[str]:
     return imports[:10]
 
 
-def extract_go_imports(content: str) -> List[str]:
+def extract_go_imports(content: str) -> list[str]:
     """Extract Go imports."""
     imports = []
     pattern1 = r'^import\s+"([^"]+)"'
@@ -265,7 +263,7 @@ def extract_go_imports(content: str) -> List[str]:
     return imports[:10]
 
 
-def extract_cpp_includes(content: str) -> List[str]:
+def extract_cpp_includes(content: str) -> list[str]:
     """Extract C/C++ includes."""
     includes = []
     pattern1 = r'^#include\s+<([^>]+)>'
@@ -294,7 +292,7 @@ def is_internal_import(import_name: str, file_path: Path) -> bool:
     return False
 
 
-def infer_output(file_path: Path, lang_config: Dict) -> Dict[str, any]:
+def infer_output(file_path: Path, lang_config: dict) -> dict[str, any]:
     """Infer OUTPUT description, returns dict with classes and functions."""
     content = read_file_safe(file_path)
     if not content:
@@ -316,13 +314,11 @@ def infer_output(file_path: Path, lang_config: Dict) -> Dict[str, any]:
         return {'classes': classes[:10], 'functions': functions[:10], 'type': 'Code implementation'}
 
 
-def extract_classes(content: str, lang_name: str) -> List[str]:
+def extract_classes(content: str, lang_name: str) -> list[str]:
     """Extract class definitions."""
     classes = []
 
-    if lang_name == 'Python':
-        pattern = r'^class\s+([A-Z][a-zA-Z0-9_]*)'
-    elif lang_name in ['JavaScript', 'TypeScript']:
+    if lang_name == 'Python' or lang_name in ['JavaScript', 'TypeScript']:
         pattern = r'^class\s+([A-Z][a-zA-Z0-9_]*)'
     elif lang_name == 'Java':
         pattern = r'^(?:public\s+)?class\s+([A-Z][a-zA-Z0-9_]*)'
@@ -339,7 +335,7 @@ def extract_classes(content: str, lang_name: str) -> List[str]:
     return classes[:10]
 
 
-def extract_functions(content: str, lang_name: str) -> List[str]:
+def extract_functions(content: str, lang_name: str) -> list[str]:
     """Extract function definitions."""
     functions = []
 
@@ -409,10 +405,10 @@ def infer_position(file_path: Path, parent_dir: str, file_name: str) -> str:
     return 'Functional module'
 
 
-def read_file_safe(file_path: Path) -> Optional[str]:
+def read_file_safe(file_path: Path) -> str | None:
     """Safely read file content."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             return f.read()
     except Exception as e:
         print(f"Warning: Failed to read {file_path}: {e}")
@@ -441,7 +437,7 @@ def has_existing_header(content: str, comment_style: str) -> bool:
     return 'INPUT:' in combined and 'OUTPUT:' in combined and 'POS:' in combined
 
 
-def build_multiline_header(header_info: Dict[str, any], comment_style: str, is_line_comment: bool, comment_end: str = '') -> List[str]:
+def build_multiline_header(header_info: dict[str, any], comment_style: str, is_line_comment: bool, comment_end: str = '') -> list[str]:
     """Build multiline header comments."""
     header_lines = []
     input_info = header_info['INPUT']
@@ -492,7 +488,7 @@ def build_multiline_header(header_info: Dict[str, any], comment_style: str, is_l
     return header_lines
 
 
-def add_or_update_header(file_path: Path, header_info: Dict[str, any], dry_run: bool = False):
+def add_or_update_header(file_path: Path, header_info: dict[str, any], dry_run: bool = False):
     """Add or update file header comments."""
     lang_config = header_info['lang_config']
     comment_style = lang_config['comment_style']

@@ -4,12 +4,11 @@ Runs lint tools on specified files or the entire project.
 Supports auto-fix mode and staged-only mode.
 """
 
-import os
-import sys
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
-
 
 LINT_COMMANDS = {
     "javascript": {

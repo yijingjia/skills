@@ -4,11 +4,10 @@ Detects the programming language(s) used in a project.
 Returns a list of detected languages with confidence scores.
 """
 
-import sys
 import json
-from pathlib import Path
+import sys
 from collections import Counter
-
+from pathlib import Path
 
 LANGUAGE_MARKERS = {
     "javascript": {

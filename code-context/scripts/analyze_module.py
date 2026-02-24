@@ -7,8 +7,6 @@ Supports multiple programming languages and project types.
 
 import sys
 from pathlib import Path
-from typing import Dict, List
-
 
 SUPPORTED_EXTENSIONS = {
     '.py',
@@ -69,7 +67,7 @@ def detect_project_type(directory: Path) -> str:
     return 'Mixed/Unknown'
 
 
-def analyze_module(directory: Path) -> Dict[str, any]:
+def analyze_module(directory: Path) -> dict[str, any]:
     """Analyze module structure."""
     files = []
     subdirs = []
@@ -102,7 +100,7 @@ def analyze_module(directory: Path) -> Dict[str, any]:
     }
 
 
-def analyze_file(file_path: Path) -> Dict[str, any]:
+def analyze_file(file_path: Path) -> dict[str, any]:
     """Analyze a single file."""
     ext = file_path.suffix.lower()
     content = read_file_safe(file_path)
@@ -180,7 +178,7 @@ def detect_language(ext: str) -> str:
     return lang_map.get(ext, 'Unknown')
 
 
-def analyze_python_file(file_path: Path, content: str) -> Dict:
+def analyze_python_file(file_path: Path, content: str) -> dict:
     """Analyze Python file."""
     import re
 
@@ -225,7 +223,7 @@ def analyze_python_file(file_path: Path, content: str) -> Dict:
     }
 
 
-def analyze_js_file(file_path: Path, content: str) -> Dict:
+def analyze_js_file(file_path: Path, content: str) -> dict:
     """Analyze JavaScript/TypeScript file."""
     import re
 
@@ -278,7 +276,7 @@ def analyze_js_file(file_path: Path, content: str) -> Dict:
     }
 
 
-def analyze_java_file(file_path: Path, content: str) -> Dict:
+def analyze_java_file(file_path: Path, content: str) -> dict:
     """Analyze Java file."""
     import re
 
@@ -312,7 +310,7 @@ def analyze_java_file(file_path: Path, content: str) -> Dict:
     }
 
 
-def analyze_cpp_file(file_path: Path, content: str) -> Dict:
+def analyze_cpp_file(file_path: Path, content: str) -> dict:
     """Analyze C/C++ file."""
     import re
 
@@ -346,7 +344,7 @@ def analyze_cpp_file(file_path: Path, content: str) -> Dict:
     }
 
 
-def analyze_go_file(file_path: Path, content: str) -> Dict:
+def analyze_go_file(file_path: Path, content: str) -> dict:
     """Analyze Go file."""
     import re
 
@@ -382,7 +380,7 @@ def analyze_go_file(file_path: Path, content: str) -> Dict:
     }
 
 
-def analyze_generic_file(file_path: Path, content: str, language: str) -> Dict:
+def analyze_generic_file(file_path: Path, content: str, language: str) -> dict:
     """Analyze generic file."""
     file_type = infer_file_type(file_path)
 
@@ -433,7 +431,7 @@ def infer_file_type(file_path: Path) -> str:
     return type_map.get(ext, 'Code file')
 
 
-def infer_file_description(file_path: Path, classes: List, functions: List) -> str:
+def infer_file_description(file_path: Path, classes: list, functions: list) -> str:
     """Infer file description."""
     name = file_path.name.lower()
 
@@ -452,14 +450,14 @@ def infer_file_description(file_path: Path, classes: List, functions: List) -> s
 def read_file_safe(file_path: Path) -> str:
     """Safely read file."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             return f.read()
     except Exception as e:
         print(f"Warning: Failed to read {file_path}: {e}")
         return None
 
 
-def generate_claude_md(directory: Path, module_info: Dict, output_path: Path = None):
+def generate_claude_md(directory: Path, module_info: dict, output_path: Path = None):
     """Generate Claude.md file."""
     if output_path is None:
         output_path = directory / 'Claude.md'
@@ -526,7 +524,7 @@ Project type: {module_info['project_type']}
     print(f"✅ Generated {output_path}")
 
 
-def infer_module_position(directory: Path, module_info: Dict) -> str:
+def infer_module_position(directory: Path, module_info: dict) -> str:
     """Infer module position."""
     dir_name = directory.name.lower()
 
@@ -560,7 +558,7 @@ def infer_module_position(directory: Path, module_info: Dict) -> str:
     return 'Functional module'
 
 
-def infer_module_logic(directory: Path, module_info: Dict) -> str:
+def infer_module_logic(directory: Path, module_info: dict) -> str:
     """Infer module logic."""
     dir_name = directory.name.lower()
     file_count = len(module_info['files'])
@@ -583,7 +581,7 @@ def infer_module_logic(directory: Path, module_info: Dict) -> str:
     return f"Contains {file_count} files, provides related functionality"
 
 
-def infer_module_constraints(directory: Path, module_info: Dict) -> str:
+def infer_module_constraints(directory: Path, module_info: dict) -> str:
     """Infer module constraints."""
     dir_name = directory.name.lower()
 
@@ -600,7 +598,7 @@ def infer_module_constraints(directory: Path, module_info: Dict) -> str:
     return '- Refer to specific file documentation'
 
 
-def generate_domain_list(module_info: Dict) -> List[Dict]:
+def generate_domain_list(module_info: dict) -> list[dict]:
     """Generate domain list."""
     items = []
 

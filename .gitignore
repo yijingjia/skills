@@ -1,9 +1,34 @@
+# Dependencies
 **/node_modules/
+
+# Build outputs
 output/
+
+# Images
 *.png
 *.jpg
 *.jpeg
+
+# macOS
 .DS_Store
+
+# npm
 npm-debug.log*
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ruff_cache/
+*.so
+.Python
+
+# Test
 test/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

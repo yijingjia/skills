@@ -81,11 +81,11 @@ nesting:
   statement_level:
     warning: 5
 
-custom_rules:
-  marks:
-    name: "Mark Comments"
-    regex: '\\b(marks?|x?todo|fixme)\\b'
-    message: "TODO or FIXME found"
-    match_kinds:
-      - comment
-      - doc_comment
+# custom_rules:
+#   marks:
+#     name: "Mark Comments"
+#     regex: '\\b(marks?|x?todo|fixme)\\b'
+#     message: "TODO or FIXME found"
+#     match_kinds:
+#       - comment
+#       - doc_comment
