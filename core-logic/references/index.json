@@ -1,0 +1,411 @@
+{
+  "book_title": "底层逻辑 看清这个世界的底牌（拥有看透世界的底牌，启动“开挂”的人生。“5分钟商学院”背后的思维方式）",
+  "total_chapters": 45,
+  "chapters": [
+    {
+      "chapter_num": 1,
+      "title": "text/part0000.html",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch01_text_part0000_html.md",
+      "summary_file": "ch01_text_part0000_html_summary.md",
+      "char_count": 228
+    },
+    {
+      "chapter_num": 2,
+      "title": "text/part0001.html",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch02_text_part0001_html.md",
+      "summary_file": "ch02_text_part0001_html_summary.md",
+      "char_count": 601
+    },
+    {
+      "chapter_num": 3,
+      "title": "作者简介",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch03_作者简介.md",
+      "summary_file": "ch03_作者简介_summary.md",
+      "char_count": 201
+    },
+    {
+      "chapter_num": 4,
+      "title": "第1章　是非对错的底层逻辑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch04_第1章_是非对错的底层逻辑.md",
+      "summary_file": "ch04_第1章_是非对错的底层逻辑_summary.md",
+      "char_count": 1794
+    },
+    {
+      "chapter_num": 5,
+      "title": "人性、道德和法律",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch05_人性_道德和法律.md",
+      "summary_file": "ch05_人性_道德和法律_summary.md",
+      "char_count": 1512
+    },
+    {
+      "chapter_num": 6,
+      "title": "人生的三层智慧：博弈、定力、选择",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch06_人生的三层智慧_博弈_定力_选择.md",
+      "summary_file": "ch06_人生的三层智慧_博弈_定力_选择_summary.md",
+      "char_count": 3345
+    },
+    {
+      "chapter_num": 7,
+      "title": "公理体系VS逻辑推演",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch07_公理体系VS逻辑推演.md",
+      "summary_file": "ch07_公理体系VS逻辑推演_summary.md",
+      "char_count": 4554
+    },
+    {
+      "chapter_num": 8,
+      "title": "第2章　思考问题的底层逻辑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch08_第2章_思考问题的底层逻辑.md",
+      "summary_file": "ch08_第2章_思考问题的底层逻辑_summary.md",
+      "char_count": 1336
+    },
+    {
+      "chapter_num": 9,
+      "title": "如何防止“注射式洗脑”",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch09_如何防止_注射式洗脑_.md",
+      "summary_file": "ch09_如何防止_注射式洗脑__summary.md",
+      "char_count": 2746
+    },
+    {
+      "chapter_num": 10,
+      "title": "如何赢得一场辩论",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch10_如何赢得一场辩论.md",
+      "summary_file": "ch10_如何赢得一场辩论_summary.md",
+      "char_count": 1907
+    },
+    {
+      "chapter_num": 11,
+      "title": "普通和优秀的差距，在于解决问题的方式不同",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch11_普通和优秀的差距_在于解决问题的方式不同.md",
+      "summary_file": "ch11_普通和优秀的差距_在于解决问题的方式不同_summary.md",
+      "char_count": 2526
+    },
+    {
+      "chapter_num": 12,
+      "title": "如何快速洞察本质",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch12_如何快速洞察本质.md",
+      "summary_file": "ch12_如何快速洞察本质_summary.md",
+      "char_count": 5302
+    },
+    {
+      "chapter_num": 13,
+      "title": "流程、制度与系统",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch13_流程_制度与系统.md",
+      "summary_file": "ch13_流程_制度与系统_summary.md",
+      "char_count": 2933
+    },
+    {
+      "chapter_num": 14,
+      "title": "逻辑思维与逻辑闭环",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch14_逻辑思维与逻辑闭环.md",
+      "summary_file": "ch14_逻辑思维与逻辑闭环_summary.md",
+      "char_count": 6330
+    },
+    {
+      "chapter_num": 15,
+      "title": "复利思维",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch15_复利思维.md",
+      "summary_file": "ch15_复利思维_summary.md",
+      "char_count": 3941
+    },
+    {
+      "chapter_num": 16,
+      "title": "概率思维",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch16_概率思维.md",
+      "summary_file": "ch16_概率思维_summary.md",
+      "char_count": 4620
+    },
+    {
+      "chapter_num": 17,
+      "title": "数学思维",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch17_数学思维.md",
+      "summary_file": "ch17_数学思维_summary.md",
+      "char_count": 7440
+    },
+    {
+      "chapter_num": 18,
+      "title": "系统思维",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch18_系统思维.md",
+      "summary_file": "ch18_系统思维_summary.md",
+      "char_count": 2530
+    },
+    {
+      "chapter_num": 19,
+      "title": "第3章　个体进化的底层逻辑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch19_第3章_个体进化的底层逻辑.md",
+      "summary_file": "ch19_第3章_个体进化的底层逻辑_summary.md",
+      "char_count": 6399
+    },
+    {
+      "chapter_num": 20,
+      "title": "把工作当成玩",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch20_把工作当成玩.md",
+      "summary_file": "ch20_把工作当成玩_summary.md",
+      "char_count": 2661
+    },
+    {
+      "chapter_num": 21,
+      "title": "如何做好时间管理",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch21_如何做好时间管理.md",
+      "summary_file": "ch21_如何做好时间管理_summary.md",
+      "char_count": 4100
+    },
+    {
+      "chapter_num": 22,
+      "title": "指数级增长、正态分布和幂律分布",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch22_指数级增长_正态分布和幂律分布.md",
+      "summary_file": "ch22_指数级增长_正态分布和幂律分布_summary.md",
+      "char_count": 3407
+    },
+    {
+      "chapter_num": 23,
+      "title": "把事做对，创造10倍价值",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch23_把事做对_创造10倍价值.md",
+      "summary_file": "ch23_把事做对_创造10倍价值_summary.md",
+      "char_count": 2522
+    },
+    {
+      "chapter_num": 24,
+      "title": "人脉的本质是给予价值、平等交换",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch24_人脉的本质是给予价值_平等交换.md",
+      "summary_file": "ch24_人脉的本质是给予价值_平等交换_summary.md",
+      "char_count": 2977
+    },
+    {
+      "chapter_num": 25,
+      "title": "知识、技能与态度",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch25_知识_技能与态度.md",
+      "summary_file": "ch25_知识_技能与态度_summary.md",
+      "char_count": 1856
+    },
+    {
+      "chapter_num": 26,
+      "title": "心态高过云端，姿态埋入地底",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch26_心态高过云端_姿态埋入地底.md",
+      "summary_file": "ch26_心态高过云端_姿态埋入地底_summary.md",
+      "char_count": 1014
+    },
+    {
+      "chapter_num": 27,
+      "title": "人人都应该是自己的CEO",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch27_人人都应该是自己的CEO.md",
+      "summary_file": "ch27_人人都应该是自己的CEO_summary.md",
+      "char_count": 2711
+    },
+    {
+      "chapter_num": 28,
+      "title": "艺术家为人类带来自由",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch28_艺术家为人类带来自由.md",
+      "summary_file": "ch28_艺术家为人类带来自由_summary.md",
+      "char_count": 647
+    },
+    {
+      "chapter_num": 29,
+      "title": "第4章　理解他人的底层逻辑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch29_第4章_理解他人的底层逻辑.md",
+      "summary_file": "ch29_第4章_理解他人的底层逻辑_summary.md",
+      "char_count": 3654
+    },
+    {
+      "chapter_num": 30,
+      "title": "幽默，是溢出的智慧",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch30_幽默_是溢出的智慧.md",
+      "summary_file": "ch30_幽默_是溢出的智慧_summary.md",
+      "char_count": 2477
+    },
+    {
+      "chapter_num": 31,
+      "title": "所谓洞察本质，就是会打比方",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch31_所谓洞察本质_就是会打比方.md",
+      "summary_file": "ch31_所谓洞察本质_就是会打比方_summary.md",
+      "char_count": 3470
+    },
+    {
+      "chapter_num": 32,
+      "title": "边界感的本质，是对所有权的认知",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch32_边界感的本质_是对所有权的认知.md",
+      "summary_file": "ch32_边界感的本质_是对所有权的认知_summary.md",
+      "char_count": 2890
+    },
+    {
+      "chapter_num": 33,
+      "title": "每个创业者背后，都有大量多巴胺的支撑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch33_每个创业者背后_都有大量多巴胺的支撑.md",
+      "summary_file": "ch33_每个创业者背后_都有大量多巴胺的支撑_summary.md",
+      "char_count": 3487
+    },
+    {
+      "chapter_num": 34,
+      "title": "第5章　社会协作的底层逻辑",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch34_第5章_社会协作的底层逻辑.md",
+      "summary_file": "ch34_第5章_社会协作的底层逻辑_summary.md",
+      "char_count": 2126
+    },
+    {
+      "chapter_num": 35,
+      "title": "找到并利用自己的战略势能",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch35_找到并利用自己的战略势能.md",
+      "summary_file": "ch35_找到并利用自己的战略势能_summary.md",
+      "char_count": 2763
+    },
+    {
+      "chapter_num": 36,
+      "title": "产品价格到底应该由什么决定",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch36_产品价格到底应该由什么决定.md",
+      "summary_file": "ch36_产品价格到底应该由什么决定_summary.md",
+      "char_count": 2813
+    },
+    {
+      "chapter_num": 37,
+      "title": "利润，来自没有竞争",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch37_利润_来自没有竞争.md",
+      "summary_file": "ch37_利润_来自没有竞争_summary.md",
+      "char_count": 2470
+    },
+    {
+      "chapter_num": 38,
+      "title": "没有KPI，也能管好公司",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch38_没有KPI_也能管好公司.md",
+      "summary_file": "ch38_没有KPI_也能管好公司_summary.md",
+      "char_count": 3887
+    },
+    {
+      "chapter_num": 39,
+      "title": "让优秀员工成为事业合伙人",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch39_让优秀员工成为事业合伙人.md",
+      "summary_file": "ch39_让优秀员工成为事业合伙人_summary.md",
+      "char_count": 4410
+    },
+    {
+      "chapter_num": 40,
+      "title": "勤劳能创富，但勤劳者能分到财富吗",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch40_勤劳能创富_但勤劳者能分到财富吗.md",
+      "summary_file": "ch40_勤劳能创富_但勤劳者能分到财富吗_summary.md",
+      "char_count": 4160
+    },
+    {
+      "chapter_num": 41,
+      "title": "一切的分钱方式，无外乎优先和劣后",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch41_一切的分钱方式_无外乎优先和劣后.md",
+      "summary_file": "ch41_一切的分钱方式_无外乎优先和劣后_summary.md",
+      "char_count": 3734
+    },
+    {
+      "chapter_num": 42,
+      "title": "信用，是一个人最大的资产",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch42_信用_是一个人最大的资产.md",
+      "summary_file": "ch42_信用_是一个人最大的资产_summary.md",
+      "char_count": 3255
+    },
+    {
+      "chapter_num": 43,
+      "title": "公平、公正与公开",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch43_公平_公正与公开.md",
+      "summary_file": "ch43_公平_公正与公开_summary.md",
+      "char_count": 2175
+    },
+    {
+      "chapter_num": 44,
+      "title": "效率与公平",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch44_效率与公平.md",
+      "summary_file": "ch44_效率与公平_summary.md",
+      "char_count": 3204
+    },
+    {
+      "chapter_num": 45,
+      "title": "劝酒的本质，是服从性测试",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch45_劝酒的本质_是服从性测试.md",
+      "summary_file": "ch45_劝酒的本质_是服从性测试_summary.md",
+      "char_count": 1508
+    }
+  ]
+}

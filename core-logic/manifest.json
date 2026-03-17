@@ -1,0 +1,13 @@
+{
+  "name": "底层逻辑 看清这个世界的底牌（拥有看透世界的底牌，启动“开挂”的人生。“5分钟商学院”背后的思维方式）",
+  "version": "1.0.0",
+  "generated_by": "book2skills",
+  "structure": {
+    "router": "SKILL.md",
+    "skills": "skills/",
+    "scripts": "scripts/",
+    "references": "references/",
+    "templates": "templates/"
+  },
+  "usage": "将此技能包安装到支持的 AI Agent 平台，系统级 Agent 将自动读取 SKILL.md 并根据策略按需调用 skills/ 下的工具。"
+}
