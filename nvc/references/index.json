@@ -1,0 +1,168 @@
+{
+  "book_title": "非暴力沟通",
+  "total_chapters": 18,
+  "chapters": [
+    {
+      "chapter_num": 1,
+      "title": "译序",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch01_译序.md",
+      "summary_file": "ch01_译序_summary.md",
+      "char_count": 1484
+    },
+    {
+      "chapter_num": 2,
+      "title": "语言是窗户（否则，它们是墙）",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch02_语言是窗户_否则_它们是墙_.md",
+      "summary_file": "ch02_语言是窗户_否则_它们是墙__summary.md",
+      "char_count": 275
+    },
+    {
+      "chapter_num": 3,
+      "title": "第一章 让爱融入生活",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch03_第一章_让爱融入生活.md",
+      "summary_file": "ch03_第一章_让爱融入生活_summary.md",
+      "char_count": 5787
+    },
+    {
+      "chapter_num": 4,
+      "title": "第二章 是什么蒙蔽了爱？",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch04_第二章_是什么蒙蔽了爱_.md",
+      "summary_file": "ch04_第二章_是什么蒙蔽了爱__summary.md",
+      "char_count": 4173
+    },
+    {
+      "chapter_num": 5,
+      "title": "第三章 区分观察和评论",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch05_第三章_区分观察和评论.md",
+      "summary_file": "ch05_第三章_区分观察和评论_summary.md",
+      "char_count": 4086
+    },
+    {
+      "chapter_num": 6,
+      "title": "第四章 体会和表达感受",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch06_第四章_体会和表达感受.md",
+      "summary_file": "ch06_第四章_体会和表达感受_summary.md",
+      "char_count": 3918
+    },
+    {
+      "chapter_num": 7,
+      "title": "第五章 感受的根源",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch07_第五章_感受的根源.md",
+      "summary_file": "ch07_第五章_感受的根源_summary.md",
+      "char_count": 7805
+    },
+    {
+      "chapter_num": 8,
+      "title": "第六章 请求帮助",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch08_第六章_请求帮助.md",
+      "summary_file": "ch08_第六章_请求帮助_summary.md",
+      "char_count": 11001
+    },
+    {
+      "chapter_num": 9,
+      "title": "第七章 用全身心倾听",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch09_第七章_用全身心倾听.md",
+      "summary_file": "ch09_第七章_用全身心倾听_summary.md",
+      "char_count": 9571
+    },
+    {
+      "chapter_num": 10,
+      "title": "第八章 倾听的力量",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch10_第八章_倾听的力量.md",
+      "summary_file": "ch10_第八章_倾听的力量_summary.md",
+      "char_count": 7262
+    },
+    {
+      "chapter_num": 11,
+      "title": "第九章 爱自己",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch11_第九章_爱自己.md",
+      "summary_file": "ch11_第九章_爱自己_summary.md",
+      "char_count": 5862
+    },
+    {
+      "chapter_num": 12,
+      "title": "第十章 充分表达愤怒",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch12_第十章_充分表达愤怒.md",
+      "summary_file": "ch12_第十章_充分表达愤怒_summary.md",
+      "char_count": 9554
+    },
+    {
+      "chapter_num": 13,
+      "title": "第十一章 运用强制力避免伤害",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch13_第十一章_运用强制力避免伤害.md",
+      "summary_file": "ch13_第十一章_运用强制力避免伤害_summary.md",
+      "char_count": 4180
+    },
+    {
+      "chapter_num": 14,
+      "title": "第十二章 重获生活的热情",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch14_第十二章_重获生活的热情.md",
+      "summary_file": "ch14_第十二章_重获生活的热情_summary.md",
+      "char_count": 6590
+    },
+    {
+      "chapter_num": 15,
+      "title": "第十三章 表达感激",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch15_第十三章_表达感激.md",
+      "summary_file": "ch15_第十三章_表达感激_summary.md",
+      "char_count": 4044
+    },
+    {
+      "chapter_num": 16,
+      "title": "后记",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch16_后记.md",
+      "summary_file": "ch16_后记_summary.md",
+      "char_count": 1035
+    },
+    {
+      "chapter_num": 17,
+      "title": "编后记",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch17_编后记.md",
+      "summary_file": "ch17_编后记_summary.md",
+      "char_count": 211
+    },
+    {
+      "chapter_num": 18,
+      "title": "Text/part0022.xhtml",
+      "page_start": null,
+      "page_end": null,
+      "file": "ch18_Text_part0022_xhtml.md",
+      "summary_file": "ch18_Text_part0022_xhtml_summary.md",
+      "char_count": 903
+    }
+  ]
+}

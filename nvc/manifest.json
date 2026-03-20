@@ -1,0 +1,13 @@
+{
+  "name": "非暴力沟通",
+  "version": "1.0.0",
+  "generated_by": "book2skills",
+  "structure": {
+    "router": "SKILL.md",
+    "skills": "skills/",
+    "scripts": "scripts/",
+    "references": "references/",
+    "templates": "templates/"
+  },
+  "usage": "将此技能包安装到支持的 AI Agent 平台，系统级 Agent 将自动读取 SKILL.md 并根据策略按需调用 skills/ 下的工具。"
+}
