@@ -191,6 +191,7 @@ def main():
     parser.add_argument("file")
     parser.add_argument("--theme",default="light",choices=list(THEMES.keys()))
     parser.add_argument("--font",default="sans",choices=list(FONTS.keys()))
+    parser.add_argument("--scale",default=4,type=int,help="device scale factor, default 4 (1080x1440px)")
     args=parser.parse_args()
     md_path=Path(args.file)
     if not md_path.exists(): print(f"❌ 文件不存在: {md_path}"); sys.exit(1)
@@ -200,7 +201,7 @@ def main():
     th={**THEMES[args.theme], **{k:v for k,v in font_cfg.items() if k!="stack"}, "fontStack":font_stack}
     base_style=f'*{{box-sizing:border-box;margin:0;padding:0;}}body{{font-family:{font_stack};}}'
     nodes=parse_md(md_path.read_text(encoding="utf-8"))
-    print(f"📄 {md_path.name}  ({len(nodes)} 节点)  主题: {args.theme}  字体: {args.font}")
+    print(f"📄 {md_path.name}  ({len(nodes)} 节点)  主题: {args.theme}  字体: {args.font}  缩放: {args.scale}x")
 
     try:
         from playwright.sync_api import sync_playwright
@@ -210,17 +211,22 @@ def main():
     with sync_playwright() as pw:
         browser=pw.chromium.launch()
 
-        # measure page
+        # measure page — use file:// so relative images load correctly
+        measure_html=f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>{base_style} body{{width:800px}}</style></head><body></body></html>'
+        tmp_measure=md_path.parent/f"._tmp_measure.html"
+        tmp_measure.write_text(measure_html,encoding="utf-8")
         mp=browser.new_page(viewport={"width":800,"height":600})
-        mp.set_content(f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>{base_style}</style></head><body></body></html>')
+        mp.goto(f"file://{tmp_measure.resolve()}")
+        mp.wait_for_load_state("networkidle")
         load_js_on_page(mp)
+        tmp_measure.unlink()
         print("📐 测量节点高度...")
         pages=paginate(nodes,th,mp)
         mp.close()
         print(f"📦 共 {len(pages)} 张卡片，开始渲染...")
 
         # render page
-        rp=browser.new_page(viewport={"width":CARD_W,"height":CARD_H},device_scale_factor=3)
+        rp=browser.new_page(viewport={"width":CARD_W,"height":CARD_H},device_scale_factor=args.scale)
         for i,pg in enumerate(pages):
             html=build_card_html(pg,i,len(pages),th,base_style)
             tmp_html=md_path.parent/f"._tmp_card_{i}.html"
