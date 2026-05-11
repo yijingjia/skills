@@ -15,6 +15,8 @@ THEMES = {
 CARD_W, CARD_H = 270, 360
 PAD_V, PAD_H_CARD, PAD_BOT = 22, 20, 16
 MAX_BODY_H = CARD_H - PAD_V - PAD_BOT - 8
+COVER_IMG_MAX_H = 150  # 封面图最大高度，留出正文空间
+COVER_IMG_STYLE = f'max-width:100%;max-height:{COVER_IMG_MAX_H}px;width:auto;height:auto;border-radius:6px;margin:0 auto 9px;display:block'
 FONTS = {
     "sans": {
         "stack":        '-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif',
@@ -104,6 +106,7 @@ function nodeHtml(node,th){
 }
 function measureNodes(nodes,th){var box=document.createElement('div');box.style.cssText='position:absolute;left:-9999px;top:0;width:230px;display:flex;flex-direction:column';document.body.appendChild(box);var r=[];for(var i=0;i<nodes.length;i++){var ph=box.scrollHeight;var w=document.createElement('div');w.innerHTML=nodeHtml(nodes[i],th);var child=w.firstElementChild||w;box.appendChild(child);box.offsetHeight;r.push(box.scrollHeight-ph);}box.remove();return r;}
 function measureText(html){var d=document.createElement('div');d.style.cssText='position:absolute;left:-9999px;width:230px';d.innerHTML=html;document.body.appendChild(d);var h=d.offsetHeight;d.remove();return h;}
+async function measureTextAsync(html){var d=document.createElement('div');d.style.cssText='position:absolute;left:-9999px;width:230px';d.innerHTML=html;document.body.appendChild(d);var imgs=d.querySelectorAll('img');await Promise.all(Array.from(imgs).map(function(img){if(img.complete)return Promise.resolve();return new Promise(function(res){img.onload=res;img.onerror=res;});}));var h=d.offsetHeight;d.remove();return h;}
 """
 
 def load_js_on_page(page):
@@ -122,6 +125,40 @@ def measure_nodes(nodes, th, page):
 def measure_text_h(html, page):
     return page.evaluate("(html) => measureText(html)", html)
 
+SPLIT_PUNCT = "。！？；，：、.!?;,:"
+
+def measure_p_h(text, th, page):
+    """Measure a paragraph node's rendered height."""
+    return page.evaluate("([nodes,th]) => measureNodes(nodes,th)", [[{"type":"p","text":text}], th])[0]
+
+def split_paragraph(text, avail_h, th, page):
+    """
+    Split a paragraph so its rendered height ≤ avail_h.
+    Returns (head, tail) where head fits, tail is the rest.
+    If even 1 char overflows, returns ("", text) — caller should push entire paragraph forward.
+    Prefers to split at Chinese/Western punctuation.
+    """
+    if not text: return ("", "")
+    full_h = measure_p_h(text, th, page)
+    if full_h <= avail_h: return (text, "")
+    lo, hi = 0, len(text)
+    best = 0
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if mid == 0: lo = mid + 1; continue
+        h = measure_p_h(text[:mid], th, page)
+        if h <= avail_h:
+            best = mid; lo = mid + 1
+        else:
+            hi = mid - 1
+    if best == 0: return ("", text)
+    # Try to back up to nearest punctuation for cleaner split
+    cut = best
+    for j in range(best - 1, max(best - 30, 0) - 1, -1):
+        if text[j] in SPLIT_PUNCT:
+            cut = j + 1; break
+    return (text[:cut], text[cut:])
+
 def paginate(nodes, th, page):
     remaining = list(nodes)
     title_node = img_node = None
@@ -130,24 +167,56 @@ def paginate(nodes, th, page):
     for i,n in enumerate(remaining):
         if not img_node and n["type"]=="img": img_node=n; remaining.pop(i); break
 
-    fixed_h = PAD_V + PAD_BOT + 20
+    fixed_h = PAD_V + PAD_BOT + 5
     if title_node:
         fixed_h += measure_text_h(f'<div style="font-size:{th["szTitle"]};font-weight:{th["wTitle"]};line-height:1.25;margin-bottom:10px">{title_node["text"]}</div>', page)
-    if img_node: fixed_h += measure_text_h(f'<img src="{img_node["src"]}" style="width:230px;height:auto;border-radius:6px;margin-bottom:9px;display:block">', page)
+    if img_node:
+        img_h = page.evaluate("(html) => measureTextAsync(html)", f'<img src="{img_node["src"]}" style="{COVER_IMG_STYLE}">')
+        fixed_h += img_h
 
     heights = measure_nodes(remaining, th, page)
     cover_body=[]; used_h=fixed_h; overflow_start=len(remaining)
     for i,(n,nh) in enumerate(zip(remaining,heights)):
-        if used_h+nh<=CARD_H-8: cover_body.append(n); used_h+=nh
-        else: overflow_start=i; break
+        if used_h+nh<=MAX_BODY_H:
+            cover_body.append(n); used_h+=nh
+        else:
+            # Try to split a paragraph
+            if n["type"]=="p":
+                avail = MAX_BODY_H - used_h
+                head, tail = split_paragraph(n["text"], avail, th, page)
+                if head:
+                    cover_body.append({"type":"p","text":head})
+                    remaining[i] = {"type":"p","text":tail}
+                    overflow_start = i
+                else:
+                    overflow_start = i
+            else:
+                overflow_start = i
+            break
 
     overflow = remaining[overflow_start:]
     pages=[{"type":"cover","titleNode":title_node,"imgNode":img_node,"bodyNodes":cover_body}]
-    if overflow:
-        oh=measure_nodes(overflow,th,page); cur,h=[],0
-        for n,nh in zip(overflow,oh):
-            if h+nh>MAX_BODY_H and cur: pages.append({"type":"content","nodes":list(cur)}); cur,h=[n],nh
-            else: cur.append(n); h+=nh
+    # Content pages with paragraph splitting
+    idx = 0
+    while idx < len(overflow):
+        cur, h = [], 0
+        while idx < len(overflow):
+            n = overflow[idx]
+            nh = measure_nodes([n], th, page)[0]
+            if h + nh <= MAX_BODY_H:
+                cur.append(n); h += nh; idx += 1
+            elif n["type"] == "p" and cur:
+                avail = MAX_BODY_H - h
+                head, tail = split_paragraph(n["text"], avail, th, page)
+                if head:
+                    cur.append({"type":"p","text":head})
+                    overflow[idx] = {"type":"p","text":tail}
+                break
+            elif not cur:
+                # Single node taller than page, force-include it
+                cur.append(n); idx += 1; break
+            else:
+                break
         if cur: pages.append({"type":"content","nodes":cur})
     return pages
 
@@ -161,12 +230,12 @@ def build_card_html(pg, idx, total, th, base_style):
         tn=pg.get("titleNode"); img=pg.get("imgNode"); body=pg.get("bodyNodes",[])
         static=""
         if tn: static+=f'<div style="font-size:{th["szTitle"]};font-weight:{th["wTitle"]};line-height:1.25;margin-bottom:10px;color:{th["text"]}">{tn["text"]}</div>'
-        if img: static+=f'<img src="{img["src"]}" style="width:100%;height:auto;border-radius:6px;margin-bottom:9px;display:block">'
+        if img: static+=f'<img src="{img["src"]}" style="{COVER_IMG_STYLE}">'
         nodes_for_render = body
-        cstyle=f'width:100%;height:100%;display:flex;flex-direction:column;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;position:relative;background:{th["bg"]};overflow:hidden'
+        cstyle=f'box-sizing:border-box;width:100%;height:100%;display:flex;flex-direction:column;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;position:relative;background:{th["bg"]};overflow:hidden'
     else:
         static=""; nodes_for_render=pg["nodes"]
-        cstyle=f'width:100%;height:100%;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:{th["bg"]}'
+        cstyle=f'box-sizing:border-box;width:100%;height:100%;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:{th["bg"]}'
 
     nodes_json=json.dumps(nodes_for_render,ensure_ascii=False)
     th_json=json.dumps(th,ensure_ascii=False)
@@ -212,10 +281,11 @@ def main():
         browser=pw.chromium.launch()
 
         # measure page — use file:// so relative images load correctly
-        measure_html=f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>{base_style} body{{width:800px}}</style></head><body></body></html>'
+        content_w = CARD_W - 2 * PAD_H_CARD
+        measure_html=f'<!DOCTYPE html><html><head><meta charset="utf-8"><style>{base_style} body{{width:{content_w}px}}</style></head><body></body></html>'
         tmp_measure=md_path.parent/f"._tmp_measure.html"
         tmp_measure.write_text(measure_html,encoding="utf-8")
-        mp=browser.new_page(viewport={"width":800,"height":600})
+        mp=browser.new_page(viewport={"width":content_w,"height":600})
         mp.goto(f"file://{tmp_measure.resolve()}")
         mp.wait_for_load_state("networkidle")
         load_js_on_page(mp)
