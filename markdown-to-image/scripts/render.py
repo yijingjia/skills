@@ -100,7 +100,7 @@ function nodeHtml(node,th){
   if(t==='bq')return'<div style="border-left:3px solid '+th.hl+';padding:4px 8px;margin-bottom:10px;font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH+';font-style:italic;color:'+th.text+';opacity:.8">'+inline(node.text,th)+'</div>';
   if(t==='hr')return'<div style="border-top:0.5px solid '+th.text+';opacity:.2;margin:8px 0"></div>';
   if(t==='code'){var fs=codeFont(node.text);return'<pre style="font-family:monospace;font-size:'+fs+';line-height:1.55;padding:7px 9px;border-radius:4px;margin-bottom:10px;background:'+th.codeBg+';color:'+th.codeText+';white-space:pre-wrap;word-break:break-all">'+esc(node.text)+'</pre>';}
-  if(t==='img')return'<img src="'+node.src+'" alt="'+(node.alt||'')+'" style="max-width:100%;max-height:'+th.bodyImgMaxH+'px;width:auto;height:auto;border-radius:4px;margin:0 auto 10px;display:block">';
+  if(t==='img'){var mh=node.maxH||th.bodyImgMaxH;return'<img src="'+node.src+'" alt="'+(node.alt||'')+'" style="max-width:100%;max-height:'+mh+'px;width:auto;height:auto;border-radius:4px;margin:0 auto 10px;display:block">';}
   if(t==='ul'){var s='<div style="margin-bottom:10px">';for(var i=0;i<node.items.length;i++){var item=node.items[i];var txt=typeof item==='string'?item:item.text;var sub=typeof item==='object'&&item.sub?item.sub:[];var inner='<div>'+inline(txt,th);if(sub.length>0){inner+='<div style="margin-top:2px">';for(var j=0;j<sub.length;j++)inner+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:4px;align-items:flex-start;color:'+th.text+'"><div style="flex-shrink:0;margin-top:5px;width:2px;height:2px;border-radius:50%;background:'+th.hl+';opacity:.7"></div><div>'+inline(sub[j],th)+'</div></div>';inner+='</div>';}inner+='</div>';s+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:5px;align-items:flex-start;color:'+th.text+'"><div style="flex-shrink:0;margin-top:6px;width:3px;height:3px;border-radius:50%;background:'+th.hl+'"></div>'+inner+'</div>';}return s+'</div>';}
   if(t==='ol'){var s='<div style="margin-bottom:10px">';for(var i=0;i<node.items.length;i++)s+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:3px;color:'+th.text+'"><div style="flex-shrink:0;font-size:'+th.szBody+';color:'+th.hl+';white-space:nowrap">'+(i+1)+'.</div><div>'+inline(node.items[i],th)+'</div></div>';return s+'</div>';}
   if(t==='table'){var fs=tableFont(node.headers,node.rows),pv=fs==='6.5px'?'3px':'4px',ph=fs==='6.5px'?'4px':'5px';var ths='';for(var i=0;i<node.headers.length;i++)ths+='<th style="font-weight:'+th.wTh+';padding:'+pv+' '+ph+';border-bottom:1.5px solid '+th.hl+';text-align:left;color:'+th.text+';word-break:break-all;line-height:1.4">'+inline(node.headers[i],th)+'</th>';var trs='';for(var i=0;i<node.rows.length;i++){trs+='<tr>';for(var j=0;j<node.rows[i].length;j++)trs+='<td style="padding:'+pv+' '+ph+';border-bottom:0.5px solid '+th.text+';opacity:.8;line-height:1.4;color:'+th.text+';word-break:break-all">'+inline(node.rows[i][j],th)+'</td>';trs+='</tr>';}return'<table style="width:100%;border-collapse:collapse;font-size:'+fs+';margin-bottom:10px;table-layout:fixed"><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}
@@ -166,8 +166,10 @@ def paginate(nodes, th, page):
     title_node = img_node = None
     for i,n in enumerate(remaining):
         if not title_node and n["type"]=="h1": title_node=n; remaining.pop(i); break
+    # 只有图片紧跟在标题后（中间没有正文段落/标题）才提升为封面图
     for i,n in enumerate(remaining):
-        if not img_node and n["type"]=="img": img_node=n; remaining.pop(i); break
+        if n["type"] in ("p", "h2", "h3"): break
+        if n["type"] == "img": img_node=n; remaining.pop(i); break
 
     fixed_h = PAD_V + PAD_BOT + 5
     if title_node:
@@ -179,6 +181,17 @@ def paginate(nodes, th, page):
     heights = measure_nodes(remaining, th, page)
     cover_body=[]; used_h=fixed_h; overflow_start=len(remaining)
     for i,(n,nh) in enumerate(zip(remaining,heights)):
+        if n["type"] == "img":
+            avail = MAX_BODY_H - used_h
+            img_max = min(BODY_IMG_MAX_H, int(avail) - 10) if avail >= 30 else BODY_IMG_MAX_H
+            # 用 maxH 直接作为图片占高（不依赖 measure_nodes，因为临时 html 已被删除）
+            estimated_h = img_max + 10  # +10 for margin-bottom
+            if used_h + estimated_h <= MAX_BODY_H:
+                cover_body.append(dict(n, maxH=img_max)); used_h += estimated_h
+            else:
+                overflow_start = i
+                break
+            continue
         if used_h+nh<=MAX_BODY_H:
             cover_body.append(n); used_h+=nh
         else:
@@ -204,6 +217,17 @@ def paginate(nodes, th, page):
         cur, h = [], 0
         while idx < len(overflow):
             n = overflow[idx]
+            if n["type"] == "img":
+                # 用 maxH 直接估算图片占高，不依赖 measure_nodes
+                avail = MAX_BODY_H - h
+                img_max = min(BODY_IMG_MAX_H, int(avail) - 10) if avail >= 30 else BODY_IMG_MAX_H
+                estimated_h = img_max + 10
+                capped = dict(n, maxH=img_max)
+                if h + estimated_h <= MAX_BODY_H:
+                    cur.append(capped); h += estimated_h; idx += 1
+                elif not cur:
+                    cur.append(capped); idx += 1
+                break
             nh = measure_nodes([n], th, page)[0]
             if h + nh <= MAX_BODY_H:
                 cur.append(n); h += nh; idx += 1
