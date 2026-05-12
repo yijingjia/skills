@@ -16,7 +16,9 @@ CARD_W, CARD_H = 270, 360
 PAD_V, PAD_H_CARD, PAD_BOT = 22, 20, 16
 MAX_BODY_H = CARD_H - PAD_V - PAD_BOT - 8
 COVER_IMG_MAX_H = 150  # 封面图最大高度，留出正文空间
+BODY_IMG_MAX_H  = 200  # 正文页图片最大高度，防止高图撑爆卡片
 COVER_IMG_STYLE = f'max-width:100%;max-height:{COVER_IMG_MAX_H}px;width:auto;height:auto;border-radius:6px;margin:0 auto 9px;display:block'
+BODY_IMG_STYLE  = f'max-width:100%;max-height:{BODY_IMG_MAX_H}px;width:auto;height:auto;border-radius:4px;margin-bottom:10px;display:block'
 FONTS = {
     "sans": {
         "stack":        '-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif',
@@ -98,7 +100,7 @@ function nodeHtml(node,th){
   if(t==='bq')return'<div style="border-left:3px solid '+th.hl+';padding:4px 8px;margin-bottom:10px;font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH+';font-style:italic;color:'+th.text+';opacity:.8">'+inline(node.text,th)+'</div>';
   if(t==='hr')return'<div style="border-top:0.5px solid '+th.text+';opacity:.2;margin:8px 0"></div>';
   if(t==='code'){var fs=codeFont(node.text);return'<pre style="font-family:monospace;font-size:'+fs+';line-height:1.55;padding:7px 9px;border-radius:4px;margin-bottom:10px;background:'+th.codeBg+';color:'+th.codeText+';white-space:pre-wrap;word-break:break-all">'+esc(node.text)+'</pre>';}
-  if(t==='img')return'<img src="'+node.src+'" alt="'+(node.alt||'')+'" style="width:100%;height:auto;border-radius:4px;margin-bottom:10px;display:block">';
+  if(t==='img')return'<img src="'+node.src+'" alt="'+(node.alt||'')+'" style="max-width:100%;max-height:'+th.bodyImgMaxH+'px;width:auto;height:auto;border-radius:4px;margin:0 auto 10px;display:block">';
   if(t==='ul'){var s='<div style="margin-bottom:10px">';for(var i=0;i<node.items.length;i++){var item=node.items[i];var txt=typeof item==='string'?item:item.text;var sub=typeof item==='object'&&item.sub?item.sub:[];var inner='<div>'+inline(txt,th);if(sub.length>0){inner+='<div style="margin-top:2px">';for(var j=0;j<sub.length;j++)inner+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:4px;align-items:flex-start;color:'+th.text+'"><div style="flex-shrink:0;margin-top:5px;width:2px;height:2px;border-radius:50%;background:'+th.hl+';opacity:.7"></div><div>'+inline(sub[j],th)+'</div></div>';inner+='</div>';}inner+='</div>';s+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:5px;align-items:flex-start;color:'+th.text+'"><div style="flex-shrink:0;margin-top:6px;width:3px;height:3px;border-radius:50%;background:'+th.hl+'"></div>'+inner+'</div>';}return s+'</div>';}
   if(t==='ol'){var s='<div style="margin-bottom:10px">';for(var i=0;i<node.items.length;i++)s+='<div style="font-size:'+th.szBody+';font-weight:'+th.wBody+';line-height:'+LH_LIST+';display:flex;gap:3px;color:'+th.text+'"><div style="flex-shrink:0;font-size:'+th.szBody+';color:'+th.hl+';white-space:nowrap">'+(i+1)+'.</div><div>'+inline(node.items[i],th)+'</div></div>';return s+'</div>';}
   if(t==='table'){var fs=tableFont(node.headers,node.rows),pv=fs==='6.5px'?'3px':'4px',ph=fs==='6.5px'?'4px':'5px';var ths='';for(var i=0;i<node.headers.length;i++)ths+='<th style="font-weight:'+th.wTh+';padding:'+pv+' '+ph+';border-bottom:1.5px solid '+th.hl+';text-align:left;color:'+th.text+';word-break:break-all;line-height:1.4">'+inline(node.headers[i],th)+'</th>';var trs='';for(var i=0;i<node.rows.length;i++){trs+='<tr>';for(var j=0;j<node.rows[i].length;j++)trs+='<td style="padding:'+pv+' '+ph+';border-bottom:0.5px solid '+th.text+';opacity:.8;line-height:1.4;color:'+th.text+';word-break:break-all">'+inline(node.rows[i][j],th)+'</td>';trs+='</tr>';}return'<table style="width:100%;border-collapse:collapse;font-size:'+fs+';margin-bottom:10px;table-layout:fixed"><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}
@@ -267,7 +269,7 @@ def main():
 
     font_cfg=FONTS[args.font]
     font_stack=font_cfg["stack"]
-    th={**THEMES[args.theme], **{k:v for k,v in font_cfg.items() if k!="stack"}, "fontStack":font_stack}
+    th={**THEMES[args.theme], **{k:v for k,v in font_cfg.items() if k!="stack"}, "fontStack":font_stack, "bodyImgMaxH":BODY_IMG_MAX_H}
     base_style=f'*{{box-sizing:border-box;margin:0;padding:0;}}body{{font-family:{font_stack};}}'
     nodes=parse_md(md_path.read_text(encoding="utf-8"))
     print(f"📄 {md_path.name}  ({len(nodes)} 节点)  主题: {args.theme}  字体: {args.font}  缩放: {args.scale}x")
