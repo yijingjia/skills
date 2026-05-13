@@ -83,7 +83,8 @@ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g
 function inline(text,th){
   text=esc(text);
   text=text.replace(/\\*\\*(.+?)\\*\\*/g,'<span style="color:'+th.hl+';font-weight:'+th.wHl+'">$1</span>');
-  text=text.replace(/\\*(.+?)\\*/g,'<em style="font-style:italic">$1</em>');
+  text=text.replace(/(?<![*])[*](?![*])(.+?)(?<![*])[*](?![*])/g,'<em style="font-style:italic">$1</em>');
+  text=text.replace(/(?<!_)_(?!_)([^_]+?)(?<!_)_(?!_)/g,'<em style="font-style:italic">$1</em>');
   text=text.replace(/`([^`]+)`/g,'<code style="font-family:inherit;font-size:'+th.szCode+';font-weight:'+th.wCode+';padding:1px 4px;border-radius:3px;background:'+th.icBg+';color:'+th.text+'">$1</code>');
   text=text.replace(/\\[([^\\]]+)\\]\\([^)]+\\)/g,'<span style="color:'+th.hl+'">$1</span>');
   return text;
