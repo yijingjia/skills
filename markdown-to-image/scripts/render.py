@@ -3,7 +3,7 @@
 markdown-to-image renderer — Markdown -> XHS card PNGs via Playwright
 Usage: python render.py <file.md> [--theme light|dark|warm|forest]
 """
-import sys, re, json, argparse, tempfile, os
+import sys, re, json, argparse, tempfile, os, base64, mimetypes
 from pathlib import Path
 
 THEMES = {
@@ -247,8 +247,26 @@ def paginate(nodes, th, page):
         if cur: pages.append({"type":"content","nodes":cur})
     return pages
 
+# ── Image helpers ────────────────────────────────────────────────────────────
+def img_to_data_url(src, img_dir):
+    """Convert a local image path to a base64 data URL."""
+    p = Path(src) if Path(src).is_absolute() else img_dir / src
+    if not p.exists():
+        return src
+    mime = mimetypes.guess_type(str(p))[0] or "image/png"
+    return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode()}"
+
+def resolve_img_srcs(nodes, img_dir):
+    """Return new node list with all img src replaced by base64 data URLs."""
+    result = []
+    for n in nodes:
+        if n.get("type") == "img":
+            n = dict(n, src=img_to_data_url(n["src"], img_dir))
+        result.append(n)
+    return result
+
 # ── Card HTML builder ─────────────────────────────────────────────────────────
-def build_card_html(pg, idx, total, th, base_style):
+def build_card_html(pg, idx, total, th, base_style, img_dir=None):
     pg_num = f'<div style="position:absolute;bottom:12px;right:16px;font-size:9px;opacity:.35;color:{th["text"]}">{idx+1} / {total}</div>'
     deco   = f'<div style="position:absolute;right:-20px;bottom:-20px;width:90px;height:90px;border-radius:50%;background:{th["hl"]};opacity:.07"></div>'
     nodes_for_render = []
@@ -257,11 +275,13 @@ def build_card_html(pg, idx, total, th, base_style):
         tn=pg.get("titleNode"); img=pg.get("imgNode"); body=pg.get("bodyNodes",[])
         static=""
         if tn: static+=f'<div style="font-size:{th["szTitle"]};font-weight:{th["wTitle"]};line-height:1.25;margin-bottom:10px;color:{th["text"]}">{tn["text"]}</div>'
-        if img: static+=f'<img src="{img["src"]}" style="{COVER_IMG_STYLE}">'
-        nodes_for_render = body
+        if img:
+            cover_src = img_to_data_url(img["src"], img_dir) if img_dir else img["src"]
+            static+=f'<img src="{cover_src}" style="{COVER_IMG_STYLE}">'
+        nodes_for_render = resolve_img_srcs(body, img_dir) if img_dir else body
         cstyle=f'box-sizing:border-box;width:100%;height:100%;display:flex;flex-direction:column;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;position:relative;background:{th["bg"]};overflow:hidden'
     else:
-        static=""; nodes_for_render=pg["nodes"]
+        static=""; nodes_for_render = resolve_img_srcs(pg["nodes"], img_dir) if img_dir else pg["nodes"]
         cstyle=f'box-sizing:border-box;width:100%;height:100%;padding:{PAD_V}px {PAD_H_CARD}px {PAD_BOT}px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:{th["bg"]}'
 
     nodes_json=json.dumps(nodes_for_render,ensure_ascii=False)
@@ -287,7 +307,7 @@ def main():
     parser.add_argument("file")
     parser.add_argument("--theme",default="light",choices=list(THEMES.keys()))
     parser.add_argument("--font",default="sans",choices=list(FONTS.keys()))
-    parser.add_argument("--scale",default=4,type=int,help="device scale factor, default 4 (1080x1440px)")
+    parser.add_argument("--scale",default=8,type=int,help="device scale factor, default 8 (2160x2880px)")
     args=parser.parse_args()
     md_path=Path(args.file)
     if not md_path.exists(): print(f"❌ 文件不存在: {md_path}"); sys.exit(1)
@@ -325,7 +345,7 @@ def main():
         # render page
         rp=browser.new_page(viewport={"width":CARD_W,"height":CARD_H},device_scale_factor=args.scale)
         for i,pg in enumerate(pages):
-            html=build_card_html(pg,i,len(pages),th,base_style)
+            html=build_card_html(pg,i,len(pages),th,base_style,img_dir=md_path.parent)
             tmp_html=md_path.parent/f"._tmp_card_{i}.html"
             tmp_html.write_text(html,encoding="utf-8")
             rp.goto(f"file://{tmp_html.resolve()}")
